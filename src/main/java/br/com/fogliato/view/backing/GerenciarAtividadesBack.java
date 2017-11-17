@@ -75,6 +75,7 @@ public class GerenciarAtividadesBack implements Serializable {
 	public void remover(AtividadeDto atividade) {
 		try {
 			atividadeRestClient.removerAtividade(atividade);
+			listarAtividades();
 			JsfUtils.exibirMensagem(FacesMessage.SEVERITY_INFO, "Atividade removida com sucesso!");
 		} catch (Exception e) {
 			JsfUtils.exibirMensagem(FacesMessage.SEVERITY_ERROR, "Não foi possível remover a atividade. " + e.getMessage());
@@ -167,7 +168,7 @@ public class GerenciarAtividadesBack implements Serializable {
     }
     
     public boolean isPermitidoExcluir(AtividadeDto atividade) {
-    	return TipoAtividade.MANUTENCAO_URGENTE.toString().equals(atividade.getTipoAtividade());
+    	return !TipoAtividade.MANUTENCAO_URGENTE.toString().equals(atividade.getTipoAtividade());
     }
     
     public boolean isConcluida(AtividadeDto atividade) {
