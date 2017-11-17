@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<h:outputScript library="js" name="js/primefaces_locales.js" />	
+</h:head>
+
+<h:body>
+	<h3>Gerenciar Atividades</h3>
+	
+	<h:form>
+		<p:growl autoUpdate="true" life="4000" escape="false" />
+	</h:form>
+
+	<h:form style="font-size: 14px;" id="formGerenciarAtividades">
+		<div align="right">
+        	<p:commandButton action="#{gerenciarAtividades.ativarModoCadastro()}"
+        	    value="Cadastrar" update=":formGerenciarAtividades" immediate="true"  />
+        		    
+        	<p:commandButton action="#{gerenciarAtividades.ativarModoPesquisa()}"
+        	    value="Pesquisar" update=":formGerenciarAtividades" immediate="true" />        		    
+		</div>
+		
+		<p:spacer height="10" width="100%" />
+		
+		<p:outputPanel id="opConsulta" rendered="#{!gerenciarAtividades.isModoCadastro()}">
+
+			<p:panelGrid layout="grid" columns="1" id="gridConsulta">
+				
+				<p:outputLabel for="rad" value="Filtrar por:" />
+        		<p:selectOneRadio id="rad" value="#{gerenciarAtividades.filtro}">
+            		<f:selectItem itemLabel="Em Aberto" itemValue="#{gerenciarAtividades.getOpcaoFiltroEmAberto()}" />
+            		<f:selectItem itemLabel="Concluídas" itemValue="#{gerenciarAtividades.getOpcaoFiltroConcluidas()}" />
+        		</p:selectOneRadio>
+        		
+        		<p:commandButton action="#{gerenciarAtividades.listarAtividades()}"
+        		    icon="fa fa-search" value="Buscar" update=":formGerenciarAtividades:tableAtividades" />
+				
+				<p:dataTable id="tableAtividades" var="atividade" value="#{gerenciarAtividades.atividades}" rows="10"
+					paginator="true" currentPageReportTemplate="{currentPage} de {totalPages}" paginatorPosition="bottom"
+					paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					rowsPerPageTemplate="5,10,15" emptyMessage="Nenhum registro encontrado.">
+					
+					<p:column headerText="ID" width="10%">
+						<h:outputText value="#{atividade.idAtividade}" />
+					</p:column>
+
+					<p:column headerText="Título" width="50%">
+						<h:outputText value="#{atividade.titulo}" />
+					</p:column>
+					
+					<p:column headerText="Tipo" width="15%" style="text-align: center;">
+						<h:outputText value="#{gerenciarAtividades.getDescricaoTipoAtividade(atividade.tipoAtividade)}" />
+					</p:column>
+					
+					<p:column headerText="Data Conclusão" width="15%"  style="text-align: center;">
+						<h:outputText value="#{atividade.dataConclusao}" converter="localDateTimeConverter"/>
+					</p:column>
+
+					<p:column headerText="Ações" width="10%" style="text-align: center;">
+        				<p:commandButton action="#{gerenciarAtividades.alterar(atividade)}" title="Alterar atividade"
+        		    		icon="fa fa-edit" style="width: 26px; height: 26px;" update=":formGerenciarAtividades"/>
+        		    		
+        				<p:commandButton action="#{gerenciarAtividades.selecionar(atividade)}" title="Concluir atividade"
+        				    oncomplete="PF('dialogConcluirAtividade').show()"
+        		    		icon="fa fa-check-circle" style="width: 26px; height: 26px;" update=":formGerenciarAtividades, :formConcluirDialog" 
+        		    		rendered="#{!gerenciarAtividades.isConcluida(atividade)}" />
+        		    		
+        				<p:commandButton action="#{gerenciarAtividades.reabrir(atividade)}" title="Reabrir atividade"
+        		    		icon="fa fa-history" style="width: 26px; height: 26px;" update=":formGerenciarAtividades" 
+        		    		rendered="#{gerenciarAtividades.isConcluida(atividade)}" />        		    		
+        		    		
+        				<p:commandButton action="#{gerenciarAtividades.remover(atividade)}" title="Remover atividade"
+        		    		icon="fa fa-remove" style="width: 26px; height: 26px;" update="tableAtividades" 
+        		    		rendered="#{gerenciarAtividades.isPermitidoExcluir(atividade)}" >
+        		    		
+							<p:confirm header="Exclusão" icon="ui-icon-alert"
+								message="Tem certeza que deseja excluir este registro?" />        		    		
+        		    	</p:commandButton>        		    		
+					</p:column>
+				</p:dataTable>
+			</p:panelGrid>
+		</p:outputPanel>
+
+		<p:outputPanel id="opCadastro" rendered="#{gerenciarAtividades.isModoCadastro()}">
+			<p:panelGrid layout="grid" columns="2">
+
+				<p:outputLabel value="ID" for="iptId" />
+				<p:inputText id="iptId" disabled="true"
+					value="#{gerenciarAtividades.atividade.idAtividade}" />
+
+				<p:outputLabel value="Título" for="iptTitulo" />
+				<p:inputText id="iptTitulo"
+					value="#{gerenciarAtividades.atividade.titulo}" maxlength="50"
+					required="true" style="width: 96%"/>
+
+				<p:outputLabel value="Descrição" for="iptDescricao" />
+				<p:inputTextarea id="iptDescricao"
+					value="#{gerenciarAtividades.atividade.descricao}" maxlength="500"
+					required="true"  style="width: 96%; height: 30px;"/>
+
+				<p:outputLabel value="Tipo de Atividade" for="cbTipoAtividade" />
+				<p:selectOneMenu id="cbTipoAtividade" value="#{gerenciarAtividades.atividade.tipoAtividade}">
+					<f:selectItems value="#{gerenciarAtividades.getTiposAtividades()}"
+					    var="tipoAtividade" 
+						itemLabel="#{gerenciarAtividades.getDescricaoEnum(tipoAtividade)}" />
+				</p:selectOneMenu>
+			</p:panelGrid>
+			
+			<p:spacer width="100%" height="10"/>
+			
+			<p:commandButton action="#{gerenciarAtividades.salvar()}" icon="fa fa-save"
+				update=":formGerenciarAtividades" value="Salvar"/>
+		</p:outputPanel>
+		
+		<p:confirmDialog global="true" showEffect="fade" hideEffect="fade" style="font-size: 14px;">
+        	<p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+        	<p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+        </p:confirmDialog>
+	</h:form>
+	
+	<p:dialog header="Concluir Atividade" id='dialogConcluirAtividade'
+		widgetVar="dialogConcluirAtividade" resizable="false" width="40%"
+		height="50%" style="min-width: 300px;" closeOnEscape="true"
+		responsive="true" closable="true" modal="true" appendTo="@(body)">
+
+		<h:form id='formConcluirDialog'>
+			<p:panelGrid layout="grid" columns="2" 
+			  	columnClasses="ui-grid-col-2, ui-grid-col-10">
+			  	
+				<p:outputLabel value="Descrição" for="iptDescricao" />
+				<p:inputTextarea id="iptDescricao"
+					value="#{gerenciarAtividades.atividade.descricao}" maxlength="500"
+					required="true"  style="width: 96%; height: 30px;"/>
+			</p:panelGrid>
+			
+			<p:spacer height="10" width="100%" />
+			
+			<p:commandButton 
+				oncomplete="if(!args.validationFailed){PF('dialogConcluirAtividade').hide()}"
+				icon="fa fa-check" value="Concluir" title="Concluir atividade" style="width: auto; font-size: 14px;"
+				actionListener="#{gerenciarAtividades.concluir()}"
+				update="formGerenciarAtividades:tableAtividades" />
+		</h:form>
+	</p:dialog>
+</h:body>
+</html>
