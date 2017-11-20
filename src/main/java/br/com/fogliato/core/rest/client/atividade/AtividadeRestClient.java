@@ -17,7 +17,7 @@ import br.com.fogliato.core.domain.MensagemDto;
 import br.com.fogliato.core.exception.AtividadeException;
 import br.com.fogliato.core.rest.client.gson.GsonMessageBodyHandler;
 
-/***
+/**
  * 
  * Classe responsável por consumir operações do GestaoAtividadesBackend, utiliza o {@link Gson} 
  * como provider padrão para transformações objeto->JSON e JSON->objeto
