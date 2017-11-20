@@ -25,6 +25,14 @@ import com.google.gson.GsonBuilder;
 import br.com.fogliato.core.rest.client.gson.adapter.LocalDateAdapter;
 import br.com.fogliato.core.rest.client.gson.adapter.LocalDateTimeAdapter;
 
+/**
+ * 
+ * Provedor utilizado pelo RestClient para conversão de objetos para JSON e vice-versa. 
+ * Sobrescreve o Jackson utilizado por padrão.
+ * 
+ * @author Fernando Fogliato
+ *
+ */
 @Provider
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)

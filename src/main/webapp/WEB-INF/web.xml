@@ -24,6 +24,10 @@
 		<param-name>javax.faces.DATETIMECONVERTER_DEFAULT_TIMEZONE_IS_SYSTEM_TIMEZONE</param-name>
 		<param-value>true</param-value>
 	</context-param>
+	
+	<welcome-file-list>
+   		<welcome-file>pages/gerenciarAtividades.xhtml</welcome-file>
+	</welcome-file-list>
 
 	<!-- Configurações primefaces -->
 	<context-param>

@@ -3,6 +3,8 @@ package br.com.fogliato.core.domain;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+import br.com.fogliato.core.enums.TipoAtividade;
+
 public class AtividadeDto implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -13,7 +15,7 @@ public class AtividadeDto implements Serializable {
 
     private String descricao;
 
-    private String tipoAtividade;
+    private TipoAtividade tipoAtividade;
 
     private LocalDateTime dataConclusao;
 
@@ -41,11 +43,11 @@ public class AtividadeDto implements Serializable {
         this.descricao = descricao;
     }
 
-    public String getTipoAtividade() {
+    public TipoAtividade getTipoAtividade() {
         return tipoAtividade;
     }
 
-    public void setTipoAtividade(String tipoAtividade) {
+    public void setTipoAtividade(TipoAtividade tipoAtividade) {
         this.tipoAtividade = tipoAtividade;
     }
 

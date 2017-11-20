@@ -61,6 +61,7 @@ public class GerenciarAtividadesBack implements Serializable {
 			
 			JsfUtils.exibirMensagem(FacesMessage.SEVERITY_INFO, "Atividade salva com sucesso!");
 			ativarModoPesquisa();
+			listarAtividades();			
 		} catch (Exception e) {
 			JsfUtils.exibirMensagem(FacesMessage.SEVERITY_ERROR, "Não foi possível salvar a atividade. " + e.getMessage());
 			FacesContext.getCurrentInstance().validationFailed();
@@ -68,8 +69,8 @@ public class GerenciarAtividadesBack implements Serializable {
 	}
 	
 	public void alterar(AtividadeDto atividade) {
-		this.atividade = atividade;
 		ativarModoCadastro();
+		this.atividade = atividade;
 	}
 	
 	public void remover(AtividadeDto atividade) {
@@ -101,6 +102,7 @@ public class GerenciarAtividadesBack implements Serializable {
 	public void reabrir(AtividadeDto atividade) {
 		try {
 			this.atividade = atividadeRestClient.reabrirAtividade(atividade);
+			listarAtividades();	
 			JsfUtils.exibirMensagem(FacesMessage.SEVERITY_INFO, "Atividade reaberta com sucesso!");
 		} catch (Exception e) {
 			JsfUtils.exibirMensagem(FacesMessage.SEVERITY_ERROR, "Não foi possível reabrir a atividade. " + e.getMessage());
@@ -111,7 +113,7 @@ public class GerenciarAtividadesBack implements Serializable {
 	public void ativarModoCadastro() {
 		this.modoCadastro = true;
 		this.atividade = new AtividadeDto();
-		this.atividade.setTipoAtividade(TipoAtividade.DESENVOLVIMENTO.toString());
+		this.atividade.setTipoAtividade(TipoAtividade.DESENVOLVIMENTO);
 	}
 	
 	public void ativarModoPesquisa() {
@@ -155,10 +157,6 @@ public class GerenciarAtividadesBack implements Serializable {
         return new BundleUtils().getDescricaoEnum(enumObject);
     }
 	
-	public String getDescricaoTipoAtividade(String tipo) {
-        return new BundleUtils().getDescricaoEnum(tipo);
-    }
-    
     public String getOpcaoFiltroEmAberto() {
     	return OPCAO_FILTRO_EM_ABERTO;
     }
@@ -168,7 +166,7 @@ public class GerenciarAtividadesBack implements Serializable {
     }
     
     public boolean isPermitidoExcluir(AtividadeDto atividade) {
-    	return !TipoAtividade.MANUTENCAO_URGENTE.toString().equals(atividade.getTipoAtividade());
+    	return TipoAtividade.MANUTENCAO_URGENTE != atividade.getTipoAtividade();
     }
     
     public boolean isConcluida(AtividadeDto atividade) {

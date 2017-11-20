@@ -8,6 +8,7 @@
 	xmlns:p="http://primefaces.org/ui">
 
 <h:head>
+	<title>Gerenciador de Atividades</title>
 	<h:outputScript library="js" name="js/primefaces_locales.js" />	
 </h:head>
 
@@ -56,7 +57,7 @@
 					</p:column>
 					
 					<p:column headerText="Tipo" width="15%" style="text-align: center;">
-						<h:outputText value="#{gerenciarAtividades.getDescricaoTipoAtividade(atividade.tipoAtividade)}" />
+						<h:outputText value="#{gerenciarAtividades.getDescricaoEnum(atividade.tipoAtividade)}" />
 					</p:column>
 					
 					<p:column headerText="Data Conclusão" width="15%"  style="text-align: center;">
@@ -148,6 +149,12 @@
 				actionListener="#{gerenciarAtividades.concluir()}"
 				update="formGerenciarAtividades:tableAtividades" />
 		</h:form>
+	</p:dialog>
+	
+	<p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+ 
+	<p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+    	<p:graphicImage name="images/ajaxloadingbar.gif" />
 	</p:dialog>
 </h:body>
 </html>

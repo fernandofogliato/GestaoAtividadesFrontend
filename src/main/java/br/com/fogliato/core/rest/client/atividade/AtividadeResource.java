@@ -13,6 +13,11 @@ import javax.ws.rs.core.Response;
 
 import br.com.fogliato.core.domain.AtividadeDto;
 
+/***
+ * Interface responsável por mapear as operações e parâmetros do serviço "Atividade". 
+ * É utilizada pelo {@link AtividadeRestClient} para poder invocar as operações do backend passando os parâmetros de acordo.
+ * @author Fernando Fogliato
+ */
 @Path("/atividade")
 public interface AtividadeResource {
 

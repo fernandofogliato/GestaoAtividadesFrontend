@@ -1,5 +1,6 @@
 package br.com.fogliato.core.rest.client.atividade;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.ws.rs.core.GenericType;
@@ -9,13 +10,25 @@ import org.jboss.resteasy.client.jaxrs.ResteasyClient;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
 
+import com.google.gson.Gson;
+
 import br.com.fogliato.core.domain.AtividadeDto;
 import br.com.fogliato.core.domain.MensagemDto;
 import br.com.fogliato.core.exception.AtividadeException;
 import br.com.fogliato.core.rest.client.gson.GsonMessageBodyHandler;
 
-public class AtividadeRestClient {
+/***
+ * 
+ * Classe responsável por consumir operações do GestaoAtividadesBackend, utiliza o {@link Gson} 
+ * como provider padrão para transformações objeto->JSON e JSON->objeto
+ * 
+ * @author Fernando Fogliato  
+ */
+public class AtividadeRestClient implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
 
+	// A URL poderia constar num arquivo .properties para poder facilitar a atualização e troca entre ambientes
 	private static final String URL_SERVICO = "http://localhost:8080/GestaoAtividadesBackend/resources/";
 	
 	private ResteasyClient client;
